@@ -1,4 +1,3 @@
-version: '3'
 
 services:
   db:
@@ -11,16 +10,16 @@ services:
       POSTGRES_DB: hydra
     ports:
       - 5432:5432
+    profiles:
+      - backend
     # volumes:
     #   - database_postgres:/var/lib/postgresql/data:rw
 
   web:
     build:
       context: web/.
-      args:
-        BUILD_TYPE: docker
     ports:
-      - "3000:80"
+      - "3000:3000"
     depends_on:
       - hydra
     links:
@@ -29,6 +28,8 @@ services:
       - HYDRA_ADMIN_URL=http://hydra:4445
       - PUBLIC_URL=http://hydra:4444
       - HYDRA_PROXY_URL=http://hydra:4445
+    profiles:
+      - frontend
 
   hydra-migrate:
     image: oryd/hydra:1.4.8
@@ -45,6 +46,8 @@ services:
       - HYDRA_SYSTEM_SECRET=youReallyNeedToChangeThis
     command:
       migrate sql -e --yes
+    profiles:
+      - backend
     
   hydra:
     image: oryd/hydra:1.4.8
@@ -68,6 +71,8 @@ services:
     command:
       # serve -c /etc/config/hydra/hydra.yml all --dangerous-force-http
       serve all --dangerous-force-http
+    profiles:
+      - backend
     # volumes:
     #   -
     #     type: bind
