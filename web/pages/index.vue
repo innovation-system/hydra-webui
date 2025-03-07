@@ -27,10 +27,10 @@ export default {
     Add,
   },
   layout: "client",
-  async asyncData({ store }) {
-    await store.dispatch("getClientList");
+  watchQuery: true,
+  async mounted() {
+    await this.$store.dispatch("getClientList");
     return {};
   },
-  watchQuery: true,
 };
 </script>

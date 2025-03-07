@@ -1,5 +1,7 @@
 export default {
+  port: process.env.PORT || 3000,
   // Global page headers: https://go.nuxtjs.dev/config-head
+
   head: {
     title: "hydra-web",
     htmlAttrs: {
@@ -50,6 +52,7 @@ export default {
     "bootstrap-vue/nuxt",
     // https://go.nuxtjs.dev/axios
     "@nuxtjs/axios",
+    "@nuxtjs/proxy",
   ],
 
   // Public run time configuration
@@ -63,8 +66,16 @@ export default {
   },
 
   proxy: {
-    "/clients": process.env.HYDRA_PROXY_URL,
-    "/oauth2": process.env.HYDRA_PROXY_URL,
+    "/clients": {
+      target: process.env.HYDRA_PROXY_URL,
+      changeOrigin: true,
+      followRedirects: true, // Add this to follow redirects server-side
+    },
+    "/oauth2": {
+      target: process.env.HYDRA_PROXY_URL,
+      changeOrigin: true,
+      followRedirects: true, // Add this to follow redirects server-side
+    },
   },
 
   /* application run at root by default */
