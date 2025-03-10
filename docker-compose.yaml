@@ -20,11 +20,14 @@ services:
       context: web/.
     ports:
       - "3000:3000"
+    restart: unless-stopped
     depends_on:
       - hydra
     links:
       - hydra
     environment:
+      - HOST=0.0.0.0
+      - NUXT_HOST=0.0.0.0
       - HYDRA_ADMIN_URL=http://hydra:4445
       - PUBLIC_URL=http://hydra:4444
       - HYDRA_PROXY_URL=http://hydra:4445
